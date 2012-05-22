@@ -1,7 +1,4 @@
-# Supported styles:
-# :focused, :full, :original
-# --------------
-style = :focused
+style = $RedGreenStyleFormat
 # --------------
 if Term.nil? || (style == :original)
   if Term.nil?
