@@ -2,10 +2,17 @@ module Motion; module Project
   class Config
     alias :original_spec_files :spec_files
     def spec_files
-      [
-        File.expand_path(redgreen_style_config),
+      red_green_style_config_file = File.expand_path(redgreen_style_config)
+      return original_spec_files if original_spec_files.include? red_green_style_config_file
+
+      index = original_spec_files.find_index do |file| 
+        file.include? "/lib/motion/spec.rb" 
+      end
+
+      original_spec_files.insert(index + 1, *[
+        red_green_style_config_file,
         File.expand_path(File.dirname(__FILE__) + '/spec_setup.rb')
-      ] + original_spec_files
+      ])
     end
     
     attr_accessor :redgreen_style
