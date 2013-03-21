@@ -4,10 +4,19 @@ Based on the https://github.com/mdks/rm-redgreen.
 
 ## Configuration
 
-You can specify the output style as follows:
+Add to your Gemfile and run `bundle install`:
 
 ```ruby
-app.redgreen_style = :full
+gem 'motion-redgreen'
+```
+
+Optionally, specify the output style in your Rakefile:
+
+```ruby
+Motion::Project::App.setup do |app|
+  # ...
+  app.redgreen_style = :full # default: :focused
+end
 ```
 
 The available styles are *:focused* and *:full*.
