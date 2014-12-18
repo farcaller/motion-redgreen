@@ -100,5 +100,47 @@ else
         end
       end
     end
+  elsif style == :progress
+    module Bacon
+      module SpecDoxOutput
+        def handle_specification_begin(name)
+        end
+
+        def handle_specification_end
+        end
+
+        def handle_requirement_begin(description)
+          @spec_description_cache = description
+        end
+
+        def handle_requirement_end(error)
+          @error_summaries ||= []
+          if error.empty?
+            print ".".green
+          else
+            color = color_for(error)
+            spec_error_message = @spec_description_cache + "\n"
+            spec_error_message += "\n#{spaces}[#{error}]".send(color)
+            @error_summaries << spec_error_message
+
+            if error =~ /MISSING/
+              print "?".yellow
+            else
+              print "F".red
+            end
+          end
+        end
+
+        def handle_summary
+          puts ""
+          if @error_summaries && @error_summaries.length > 0
+            puts @error_summaries.join("\n\n")
+            puts "\nBACKTRACE: #{ErrorLog}".red
+          end
+          puts "%d specifications (%d requirements), %d failures, %d errors" %
+          Counter.values_at(:specifications, :requirements, :failed, :errors)
+        end
+      end
+    end
   end
 end
